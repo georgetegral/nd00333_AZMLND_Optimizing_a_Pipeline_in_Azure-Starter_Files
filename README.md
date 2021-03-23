@@ -23,7 +23,7 @@ _Step 4_:  Finally, compare the results of the two models and write a research r
 This project uses the [Bank marketing dataset](http://archive.ics.uci.edu/ml/datasets/Bank+Marketing). It belongs to a portuguese banking institution and it is related to direct marketing campaigns.
 The dataset has the following attribute information:
 
-######Input variables:
+###Input variables:
 
 **bank client data**
 
@@ -73,7 +73,7 @@ The dataset has the following attribute information:
 
 20 - nr.employed: number of employees - quarterly indicator (numeric)
 
-######Output variable (desired target):
+###Output variable (desired target):
 
 21 - y - has the client subscribed a term deposit? (binary: 'yes','no')
 
