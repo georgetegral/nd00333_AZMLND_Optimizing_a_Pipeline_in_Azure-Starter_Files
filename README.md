@@ -143,14 +143,45 @@ automl_config = AutoMLConfig(
    compute_target=compute_target #Where the processing will take place
 )
 ```
+- AutoML runs in various models
 - Finally, the accuracy is calculated on the test set for each run and the best model is saved.
 
 ## Pipeline comparison
-**Compare the two models and their performance. What are the differences in accuracy? In architecture? If there was a difference, why do you think there was one?**
+
+**Scikit-learn Pipeline**
+
+The Scikit-learn Pipeline created one HyperDrive model with an accuracy of 90.7%
+
+**AutoML Pipeline**
+
+AutoML ran 18 models in total:
+| ITERATION | PIPELINE                                | DURATION     | METRIC       | BEST       |
+|-----------|----------                               |----------    |--------      |------      |
+|0          |MaxAbsScaler LightGBM                    |0:00:57       |0.9142        |0.9142      |
+|1          |MaxAbsScaler XGBoostClassifier           |0:01:06       |0.9137        |0.9142      |
+|2          |MaxAbsScaler RandomForest                |0:01:10       |0.8908        |0.9142      |
+|3          |MaxAbsScaler RandomForest                |0:01:04       |0.8883        |0.9142      |
+|4          |MaxAbsScaler RandomForest                |0:00:58       |0.8075        |0.9142      |
+|5          |MaxAbsScaler RandomForest                |0:01:07       |0.7842        |0.9142      |
+|6          |SparseNormalizer XGBoostClassifier       |0:01:23       |0.9106        |0.9142      |
+|7          |MaxAbsScaler GradientBoosting            |0:01:13       |0.9022        |0.9142      |
+|8          |StandardScalerWrapper RandomForest       |0:01:05       |0.9010        |0.9142      |
+|9          |MaxAbsScaler LogisticRegression          |0:01:08       |0.9083        |0.9142      |
+|10         |MaxAbsScaler LightGBM                    |0:01:15       |0.8915        |0.9142      |
+|11         |SparseNormalizer XGBoostClassifier       |0:01:15       |0.9111        |0.9142      |
+|12         |MaxAbsScaler ExtremeRandomTrees          |0:04:27       |0.8883        |0.9142      |
+|13         |StandardScalerWrapper LightGBM           |0:00:52       |0.8883        |0.9142      |
+|14         |SparseNormalizer XGBoostClassifier       |0:01:45       |0.9117        |0.9142      |
+|15         |StandardScalerWrapper ExtremeRandomTrees |0:01:05       |0.8883        |0.9142      |
+|16         |StandardScalerWrapper LightGBM           |0:05:00       |0.8883        |0.9142      |
+|17         |VotingEnsemble                           |0:03:39       |0.9160        |0.9160      |
+|18         |StackEnsemble                            |0:01:28       |0.9152        |0.9160      |
+
+For the AutoML Pipeline, the best model was VotingEnsemble with an accuracy of 91.6%
 
 ## Future work
-**What are some areas of improvement for future experiments? Why might these improvements help the model?**
 
-## Proof of cluster clean up
-**If you did not delete your compute cluster in the code, please complete this section. Otherwise, delete this section.**
-**Image of cluster marked for deletion**
+Although the model had good results, there are some areas of improvement to take into consideration for the next iteration:
+- In the case of the scikit-learn based model, a different parameter sampler could be used to not stop poor performance runs, this may bring marginal increases in accuracy, but will make the pipeline take more time to finish. Also, other parameters in the HyperDrive configuration can be tweaked around to optimize the pipeline.
+
+- In case of AutoML based model, Azure gave an Imbalanced Data warning, which should be addressed for future runs to elimiate de bias the data has towards one class. Also the 30 minutes time limit could be removed to allow more time to process a certain model.
