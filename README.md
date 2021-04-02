@@ -179,6 +179,8 @@ AutoML ran 18 models in total:
 
 For the AutoML Pipeline, the best model was VotingEnsemble with an accuracy of 91.6%
 
+The difference between each model is not too big, but the AutoML model has a better accuracy, probably because AutoML makes the necessary calculations, trainings and validations automatically, and in the case of the logistic regression one has to come to a final result by trial and error, and it could be that we did not select the best configuration for our model, hence why the AutoML model had better accuracy
+
 ## Future work
 
 Although the model had good results, there are some areas of improvement to take into consideration for the next iteration:
