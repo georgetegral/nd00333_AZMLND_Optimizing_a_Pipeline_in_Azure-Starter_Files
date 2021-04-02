@@ -5,6 +5,8 @@
    * [Summary](#Summary)
    * [Scikit-learn Pipeline](#Scikit-learn-Pipeline)
    * [AutoML](#AutoML)
+   * [Pipeline Comparison](#Pipeline-comparison)
+   * [Future Work](#Future-work)
 ## Overview
 This project is part of the Udacity Azure ML Nanodegree.
 In this project, I had the opportunity to build and optimize an Azure Machine Learning Pipeline using the Python SDK and a provided Scikit-learn logistic regression model which was customized for the project. Finally, this model is then compared to an Azure AutoML run to identify the model with the best accuracy.
