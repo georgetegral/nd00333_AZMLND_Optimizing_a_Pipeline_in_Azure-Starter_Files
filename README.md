@@ -7,24 +7,17 @@
    * [AutoML](#AutoML)
    * [Pipeline Comparison](#Pipeline-comparison)
    * [Future Work](#Future-work)
+   * [References](#References)
 ## Overview
 This project is part of the Udacity Azure ML Nanodegree.
-In this project, I had the opportunity to build and optimize an Azure Machine Learning Pipeline using the Python SDK and a provided Scikit-learn logistic regression model which was customized for the project. Finally, this model is then compared to an Azure AutoML run to identify the model with the best accuracy.
+In this project, we build and optimize an Azure Machine Learning Pipeline using the Python SDK and a provided Scikit-learn logistic regression model. This model is then compared to an Azure AutoML run and compared to the previous model to identify the most accurate model.
 
-The project followed the steps indicated in this image.
+The project followed the steps indicated in this architecture.
 ![Diagram](images/creating-and-optimizing-an-ml-pipeline.png)
 
-_Step 1_: Set up the [train script](train.py), create a Tabular Dataset from the [Bank marketing dataset](https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv) and finally evaluate it with a Scikit-learn logistic regression model.
-
-_Step 2_:  Create a [Jupyter Notebook](udacity-project.ipynb) and use HyperDrive to find the best hyperparameters for the logistic regression model.
-
-_Step 3_:  Load the same [dataset](https://automlsamplenotebookdata.blob.core.windows.net/automl-sample-notebook-data/bankmarketing_train.csv) in the notebook with TabularDatasetFactory and use AutoML to let Azure evaluate the model with the best fit from a selection of different models.
-
-_Step 4_:  Finally, compare the results of the two models and write a research report.
-
 ## Summary
-This project uses the [Bank marketing dataset](http://archive.ics.uci.edu/ml/datasets/Bank+Marketing). It belongs to a portuguese banking institution and it is related to direct marketing campaigns.
-The dataset has the following attribute information:
+This project uses a Bank marketing dataset. It belongs to a portuguese banking institution and it is related to marketing campaigns.
+this dataset has the following fields:
 
 Input variables:
 
@@ -88,11 +81,13 @@ The accuracy of the Scikit-learn based logistic regression using hyperdrive was 
 ## Scikit-learn Pipeline
 **Pipeline architecture**
 - The data is formatted with a Tabular Dataset using the TabularDatasetFactory. 
-- The data is then cleaned and preprocessed using clean_data function.
+- The data is then cleaned
+- The data is then preprocessed with the clean_data function.
 - The data is then split into a 80:20 ratio for training and testing.
 - Create a Scikit-learn based Logistic Regression model with the dataset.
 - The hyperparameters are optimized using HyperDrive.
-- Finally, the accuracy is calculated on the test set for each run and the best model is saved.
+- The accuracy is calculated on the test set for each run 
+- Finally, the best model is saved.
 
 **Parameter sampler**
 
@@ -107,11 +102,11 @@ ps = RandomParameterSampling({
 - "--C" is the Regularization
 - "--max_iter" is the maximum number of iterations
 
-RandomParameterSampling is one of the choices available for the sampler , it was chosen because it supports early termination of low-performance runs, this drastically reduces computation time and we are still able to find reasonably good models when compared to other sampler policies such as GridParameterSampling or BayesianParameterSampling that exhaustively searches over all the hyperparameter space.
+RandomParameterSampling is one of the choices available for the sampler, it was chosen because it supports early termination of low-performance runs, with this sampler we are still able to find reasonably good models when compared to other sampler policies such as GridParameterSampling or BayesianParameterSampling that exhaustively searches over all the hyperparameter space.
 
 **Early stopping policy**
 
-An early stopping policy is used to automatically terminate poorly performing runs and improve computational efficiency. Specifically, the BanditPolicy cuts more runs than other early stopping policies, that's why it was chosen.
+The early stopping policy is used to stop poorly performing runs. Specifically, the BanditPolicy cuts more runs than other early stopping policies, that's why it was chosen.
 
 It was run with the following configuration parameters:
 
@@ -119,11 +114,11 @@ It was run with the following configuration parameters:
 policy = BanditPolicy(slack_factor = 0.1, evaluation_interval=1, delay_evaluation=5)
 ```
 
-- slack_factor: The amount of slack allowed with respect to the best performing training run.The ammount specifies the allowable slack as a ratio.
+- slack_factor: The ammount specifies the allowable slack as a ratio, in the run with the highest accuracy.
 
-- evaluation_interval: The frequency for applying the policy. Each time the training script logs the primary metric, it counts as one interval.
+- evaluation_interval: The frequency for applying the policy. It counts as one interval for each log of the primary metric by the script.
 
-- delay_evaluation: Delays the first policy evaluation for a specified number of intervals.
+- delay_evaluation: For the a specified number of intervals delays the first policy evaluation.
 
 ## AutoML
 
@@ -146,7 +141,8 @@ automl_config = AutoMLConfig(
 )
 ```
 - AutoML runs in various models
-- Finally, the accuracy is calculated on the test set for each run and the best model is saved.
+- The accuracy is calculated on the test set for each run 
+- Finally, the best model is saved.
 
 ## Pipeline comparison
 
@@ -189,3 +185,11 @@ Although the model had good results, there are some areas of improvement to take
 - In the case of the scikit-learn based model, a different parameter sampler could be used to not stop poor performance runs, this may bring marginal increases in accuracy, but will make the pipeline take more time to finish. Also, other parameters in the HyperDrive configuration can be tweaked around to optimize the pipeline.
 
 - In case of AutoML based model, Azure gave an Imbalanced Data warning, which should be addressed for future runs to elimiate de bias the data has towards one class. Also the 30 minutes time limit could be removed to allow more time to process a certain model.
+
+## References
+
+- [Bank marketing dataset](http://archive.ics.uci.edu/ml/datasets/Bank+Marketing)
+- [Random Parameter Sampling Class](https://docs.microsoft.com/en-us/python/api/azureml-train-core/azureml.train.hyperdrive.randomparametersampling?view=azure-ml-py)
+- [Hyperparameter tuning a model with Azure Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-tune-hyperparameters)
+- [Exam DP-100 Topic 4 Question 36 Discussion](https://www.examtopics.com/discussions/microsoft/view/36687-exam-dp-100-topic-4-question-36-discussion/)
+- [Azure bandit_policy documentation](https://www.rdocumentation.org/packages/azuremlsdk/versions/1.10.0/topics/bandit_policy)
